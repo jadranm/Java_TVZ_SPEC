@@ -12,7 +12,7 @@ public class Item {
     BigDecimal productionCost;
     BigDecimal sellingPrice;
 
-    public Item(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal lenght, BigDecimal productionCost) {
+    public Item(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal lenght, BigDecimal productionCost, BigDecimal sellingPrice) {
         this.name = name;
         this.category = category;
         this.width = width;
@@ -21,7 +21,6 @@ public class Item {
         this.productionCost = productionCost;
         this.sellingPrice = sellingPrice;
     }
-
 
     public String getName() {
         return name;
@@ -55,7 +54,7 @@ public class Item {
         this.height = height;
     }
 
-    public BigDecimal getLenght() {
+    public BigDecimal getLength() {
         return lenght;
     }
 

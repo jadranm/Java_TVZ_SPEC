@@ -6,82 +6,74 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class Main {
-    private static final Integer NUMBER_OF_CATEGORIES = 3;
-    private static final Integer NUMBER_OF_ITEMS = 5;
+    private static final Integer NUMBER_OF_CATEGORIES = 1;
+    private static final Integer NUMBER_OF_ITEMS = 2;
     private static final Integer NUMBER_OF_FACTORIES = 2;
-    private static final Integer NUMBER_OF_ITEMS_PER_FACTORY = 2;
     private static final Integer NUMBER_OF_STORES = 2;
-    private static final Integer NUMBER_OF_ITEMS_PER_STORE = 2;
 
 
     public static void main(String[] args) {
 
         Scanner input = new Scanner(System.in);
 
-        Category[] categoryList = new Category[NUMBER_OF_CATEGORIES];
-        Item[] itemList = new Item[NUMBER_OF_ITEMS];
-        Item[] chosenItemsList = new Item[NUMBER_OF_ITEMS_PER_FACTORY];
-        Factory[] factoriesList = new Factory[NUMBER_OF_FACTORIES];
-        Store[] storeList = new Store[NUMBER_OF_STORES];
-        Item[] chosenStoreItemsList = new Item[NUMBER_OF_ITEMS_PER_FACTORY];
+        System.out.print("koliko itema proizvodi svaka tvornica: ");
+        Integer numberOfItemsPerFactory = input.nextInt();
 
+        System.out.print("koliko itema ima svaki ducan: ");
+        Integer numberOfItemsPerStore = input.nextInt();
+
+        Category[] categoryArray = new Category[NUMBER_OF_CATEGORIES];
+        Item[] itemArray = new Item[NUMBER_OF_ITEMS];
+        Factory[] factoriesArray = new Factory[NUMBER_OF_FACTORIES];
+        Store[] storeArray = new Store[NUMBER_OF_STORES];
+
+        Item[] chosenStoreItemsArray = new Item[numberOfItemsPerStore];
+        Item[] chosenItemsArray = new Item[numberOfItemsPerFactory];
         //radi ok
-        categoryInput(input, categoryList);
+        categoryInput(input, categoryArray);
+
+        itemInput(input, categoryArray, itemArray);
 
 
-        for (int i = 0; i < NUMBER_OF_ITEMS; i++) {
+        factoriesInput(input, numberOfItemsPerFactory, chosenItemsArray, itemArray, factoriesArray);
 
-            System.out.print("unesi ime predmeta: ");
-            String itemName = input.next();
+        storesInput(input, numberOfItemsPerStore, chosenItemsArray, itemArray, chosenStoreItemsArray, storeArray);
 
-            System.out.print("Odaberite kategoriju (1-" + NUMBER_OF_CATEGORIES + "): ");
-            int categoryIndex = input.nextInt();
-            Category selectedCategory = categoryList[categoryIndex - 1];
+        //svi upisi su ok
+//lenght ne length
 
-            System.out.print("unesi sirinu predmeta: ");
-            BigDecimal itemWidth = input.nextBigDecimal();
-            input.nextLine();
+        //actual logika programa
 
-            System.out.print("unesi visinu predmeta: ");
-            BigDecimal itemHeight = input.nextBigDecimal();
-            input.nextLine();
-
-            System.out.print("unesi duzinu predmeta: ");
-            BigDecimal itemLenght = input.nextBigDecimal();
-            input.nextLine();
-
-            System.out.print("unesi trosak proizvodnje: ");
-            BigDecimal itemProductionCost = input.nextBigDecimal();
-            input.nextLine();
-
-            System.out.print("unesi cijenu: ");
-            BigDecimal itemSellingPrice = input.nextBigDecimal();
-            input.nextLine();
-
-            Item newItem = new Item(itemName, selectedCategory, itemWidth, itemHeight, itemProductionCost, itemSellingPrice);
-            itemList[i] = newItem;
-        }
+        BigDecimal maxVolume = null;
+        Integer maxItemVolumeIndex = null;
+        Integer maxFactoryVolumeIndex = null;
 
 
-        for (int i = 0; i < NUMBER_OF_FACTORIES; i++) {
+        for (int i = 0; i < factoriesArray.length; i++) {
+            Item[] newItem = factoriesArray[i].getItems();
 
-            System.out.print("unesi ime tvornice: ");
-            String factoryName = input.next();
+            for (int j = 0;j < newItem.length; j++){
 
-            Address factoryAddress = addressInput(input);
+                BigDecimal itemVolume = newItem[j].getWidth().multiply(newItem[j].getHeight()).multiply(newItem[j].getLength());
+                //izracun volumena radi
 
-            for (int j = 0; j < NUMBER_OF_ITEMS_PER_FACTORY; j++) {
-                System.out.print("odaberi " + (j + 1) + " item koji se proizvodi u tvornici");
-                Integer chosenItemIndex = input.nextInt();
-                chosenItemsList[j] = itemList[chosenItemIndex];
+                if (maxVolume == null || itemVolume.compareTo(maxVolume) > 0) {
+                    maxVolume = itemVolume;
+                    maxFactoryVolumeIndex = i;
+                    maxItemVolumeIndex = j;
+                }
             }
 
-            Factory newFactory = new Factory(factoryName, factoryAddress, chosenItemsList);
-            factoriesList[i] = newFactory;
-
-
         }
+        System.out.println("najveci volumen " + maxVolume);
+        System.out.println("proizvela je tvornica " + factoriesArray[maxFactoryVolumeIndex].getName());
 
+    }
+
+    //kraj programa
+
+    //funkcije
+    private static void storesInput(Scanner input, Integer numberOfItemsPerStore, Item[] chosenItemsArray, Item[] itemArray, Item[] chosenStoreItemsArray, Store[] storeArray) {
         for (int i = 0; i < NUMBER_OF_STORES; i++) {
 
             System.out.print("unesi ime ducana: ");
@@ -91,38 +83,89 @@ public class Main {
             String storeWebAddress = input.next();
 
 
-            for (int j = 0; j < NUMBER_OF_ITEMS_PER_STORE; j++) {
-                System.out.print("odaberi " + (j + 1) + " item koji se prodaje u ducanu");
-                Integer chosenItemIndex = input.nextInt();
-                chosenItemsList[j] = itemList[chosenItemIndex];
+            for (int j = 0; j < numberOfItemsPerStore; j++) {
+                System.out.print("odaberi " + (j + 1) + " item koji se prodaje u ducanu: ");
+                int chosenItemIndex = input.nextInt();
+                chosenItemsArray[j] = itemArray[chosenItemIndex - 1];
             }
 
-            Store newStore = new Store(storeName, storeWebAddress, chosenStoreItemsList);
-            storeList[i] = newStore;
+            Store newStore = new Store(storeName, storeWebAddress, chosenStoreItemsArray);
+            storeArray[i] = newStore;
 
         }
-
-        BigDecimal maxVolume = null;
-        Integer maxVolumeIndex;
-
-        for (int i = 0; i < NUMBER_OF_ITEMS; i++) {
-            BigDecimal itemVolume = itemList[i].getWidth().multiply(itemList[i].getHeight()).multiply(itemList[i].getLenght());
-            String itemName = itemList[i].getName();
-
-            if (itemVolume.compareTo(maxVolume) > 0) {
-                maxVolume = itemVolume;
-                maxVolumeIndex = i;
-            }
-        }
-        System.out.print("");
-
     }
 
-    //kraj programa
+    private static void factoriesInput(Scanner input, Integer numberOfItemsPerFactory, Item[] chosenItemsArray, Item[] itemArray, Factory[] factoriesArray) {
+        for (int i = 0; i < NUMBER_OF_FACTORIES; i++) {
 
-    //funkcije
+            System.out.print("unesi ime tvornice: ");
+            String factoryName = input.next();
+
+            Address factoryAddress = addressInput(input);
+
+            for (int j = 0; j < numberOfItemsPerFactory; j++) {
+                System.out.print("odaberi " + (j + 1) + ". item koji se proizvodi u tvornici: ");
+                int chosenItemIndex = input.nextInt();
+                chosenItemsArray[j] = itemArray[chosenItemIndex - 1];
+            }
+
+            Factory newFactory = new Factory(factoryName, factoryAddress, chosenItemsArray);
+            factoriesArray[i] = newFactory;
+
+
+        }
+    }
+
+    private static void itemInput(Scanner input, Category[] categoryArray, Item[] itemArray) {
+        int categoryIndex;
+        BigDecimal itemWidth;
+        BigDecimal itemHeight;
+        BigDecimal itemLenght;
+        BigDecimal itemProductionCost;
+        BigDecimal itemSellingPrice;
+
+
+        int i = 0;
+
+        do {
+            System.out.print("unesi ime [" + (i + 1) + ".] predmeta: ");
+            String itemName = input.next();
+
+            System.out.print("Odaberite kategoriju (1-" + NUMBER_OF_CATEGORIES + "): ");
+            categoryIndex = input.nextInt();
+            Category selectedCategory = categoryArray[categoryIndex - 1];
+
+            System.out.print("unesi sirinu predmeta: ");
+            itemWidth = input.nextBigDecimal();
+            input.nextLine();
+
+            System.out.print("unesi visinu predmeta: ");
+            itemHeight = input.nextBigDecimal();
+            input.nextLine();
+
+            System.out.print("unesi duzinu predmeta: ");
+            itemLenght = input.nextBigDecimal();
+            input.nextLine();
+
+            System.out.print("unesi trosak proizvodnje: ");
+            itemProductionCost = input.nextBigDecimal();
+            input.nextLine();
+
+            System.out.print("unesi cijenu: ");
+            itemSellingPrice = input.nextBigDecimal();
+            input.nextLine();
+
+            Item newItem = new Item(itemName, selectedCategory, itemWidth, itemHeight,itemLenght, itemProductionCost, itemSellingPrice);
+            itemArray[i] = newItem;
+
+            i++;
+        }while (i < NUMBER_OF_ITEMS);
+    }
+
+
     private static Address addressInput(Scanner input) {
-        System.out.print("unesi adresu tvornice: ");
+        System.out.println("unesi adresu tvornice ?>>>>>>>>>>>>>>>");
+
         System.out.print("unesi ime ulice: ");
         String factoryStreet = input.next();
 
@@ -132,7 +175,7 @@ public class Main {
         System.out.print("unesi grad u kojem je tvornica: ");
         String factoryCity = input.next();
 
-        System.out.print("unesi ime ulice: ");
+        System.out.print("unesi postanski broj: ");
         String factoryPostalCode = input.next();
 
         Address newAddress = new Address(factoryStreet, factoryHouseNumber, factoryCity, factoryPostalCode);
