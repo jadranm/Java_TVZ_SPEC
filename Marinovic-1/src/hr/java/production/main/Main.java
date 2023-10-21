@@ -16,11 +16,22 @@ public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        System.out.print("koliko itema proizvodi svaka tvornica: ");
-        Integer numberOfItemsPerFactory = input.nextInt();
+        Integer numberOfItemsPerFactory = -1;
+        Integer numberOfItemsPerStore = -1;
+        do {
 
-        System.out.print("koliko itema ima svaki ducan: ");
-        Integer numberOfItemsPerStore = input.nextInt();
+
+            System.out.print("koliko itema proizvodi svaka tvornica: ");
+            numberOfItemsPerFactory = input.nextInt();
+
+            System.out.print("koliko itema ima svaki ducan: ");
+            numberOfItemsPerStore = input.nextInt();
+
+            if (numberOfItemsPerFactory < 0 || numberOfItemsPerStore < 0)
+                System.out.println("===KRIVI UPIS===");
+
+        }while (numberOfItemsPerFactory < 0 || numberOfItemsPerStore < 0);
+
 
         Category[] categoryArray = new Category[NUMBER_OF_CATEGORIES];
         Item[] itemArray = new Item[NUMBER_OF_ITEMS];
@@ -42,7 +53,6 @@ public class Main {
         factoryInput(input, numberOfItemsPerFactory, chosenItemsArray, itemArray, factoriesArray);
         System.out.println("__________________________________________________");
 
-
         storeInput(input, numberOfItemsPerStore, chosenItemsArray, itemArray, chosenStoreItemsArray, storeArray);
         System.out.println("__________________________________________________");
 
@@ -56,7 +66,7 @@ public class Main {
 
             for (int j = 0; j < newItem.length; j++) {
 
-                BigDecimal itemVolume = newItem[j].getWidth().multiply(newItem[j].getHeight()).multiply(newItem[j].getLength());
+                BigDecimal itemVolume = newItem[j].getWidth().multiply(newItem[j].getHeight()).multiply(newItem[j].getLenght());
                 //izracun volumena radi
 
                 if (maxVolume == null || itemVolume.compareTo(maxVolume) > 0) {
@@ -66,6 +76,7 @@ public class Main {
             }
 
         }
+
 
         System.out.println("najveci volumen -> " + maxVolume);
         System.out.println("proizvela je tvornica -> " + factoriesArray[maxFactoryVolumeIndex].getName());
@@ -89,6 +100,27 @@ public class Main {
         System.out.println("Najmanja cijena -> " + minPrice);
         System.out.println("Ducan sa najmanjom cijenom -> " + storeArray[minPriceStoreIndex].getName());
         //System.out.println("test line");
+
+
+
+        //radi ok
+        BigDecimal productionCostSum = BigDecimal.valueOf(0);
+
+        for (int i = 0; i < factoriesArray.length; i++) {
+            Item[] newItem = factoriesArray[i].getItems();
+
+            for (int j = 0; j < newItem.length; j++) {
+
+                productionCostSum = newItem[j].getProductionCost().add(productionCostSum);
+
+            }
+        }
+
+        System.out.println(productionCostSum);
+
+
+
+
 
     }
     private static void storeInput(Scanner input, Integer numberOfItemsPerStore, Item[] chosenItemsArray, Item[] itemArray, Item[] chosenStoreItemsArray, Store[] storeArray) {
@@ -168,9 +200,22 @@ public class Main {
             System.out.print("unesi ime " + (i + 1) + ". predmeta: ");
             String itemName = input.next();
 
-            System.out.print("Odaberite kategoriju (1-" + NUMBER_OF_CATEGORIES + "): ");
-            Integer categoryIndex = input.nextInt();
-            Category selectedCategory = categoryArray[categoryIndex - 1];
+            Integer categoryIndex = -1;
+            Category selectedCategory = null;
+            do {
+
+                System.out.print("Odaberite kategoriju (1-" + NUMBER_OF_CATEGORIES + "): ");
+                categoryIndex = input.nextInt();
+                
+
+                if (categoryIndex < 0 || categoryIndex > NUMBER_OF_CATEGORIES) {
+                    System.out.println("===UNESENA JE KATEGORIJA KOJA NE POSTOJI===");
+                }else {
+                    selectedCategory = categoryArray[categoryIndex - 1];    
+                }
+
+            }while (categoryIndex < 0 || categoryIndex > NUMBER_OF_CATEGORIES);
+
 
             System.out.print("unesi sirinu predmeta: ");
             BigDecimal itemWidth = input.nextBigDecimal();
@@ -192,24 +237,74 @@ public class Main {
             BigDecimal itemSellingPrice = input.nextBigDecimal();
             input.nextLine();
 
-            Item newItem = new Item(itemName, selectedCategory, itemWidth, itemHeight,itemLenght, itemProductionCost, itemSellingPrice);
+            System.out.print("unesi poreznu stopu u postotku: ");
+            Double itemTaxRate = input.nextDouble();
+            BigDecimal taxRateBigDecimal = BigDecimal.valueOf(itemTaxRate);
+            input.nextLine();
+
+            BigDecimal itemPriceWithTax = itemSellingPrice.add(itemSellingPrice.multiply(taxRateBigDecimal.divide(BigDecimal.valueOf(100))));
+
+            System.out.println("cijena sa porezom: " + itemPriceWithTax);
+            Item newItem = new Item(itemName, selectedCategory, itemWidth, itemHeight,itemLenght, itemProductionCost, itemSellingPrice,itemTaxRate);
             itemArray[i] = newItem;
 
         }
     }
 
     private static void categoryInput(Scanner input, Category[] categoryArray) {
+
         for (int i = 0;i < NUMBER_OF_CATEGORIES; i++){
-            System.out.print("unesi ime "+ (i+1) +". kategorije: ");
-            String categoryName = input.next();
+            String categoryName;
+            String categoryDescription;
+
+
+            System.out.print("unesi ime " + (i + 1) + ". kategorije: ");
+            categoryName = input.next();
             input.nextLine();
 
-            System.out.print("unesi opis "+ (i+1) +". kategorije: ");
-            String categoryDescription = input.next();
+            System.out.print("unesi opis " + (i + 1) + ". kategorije: ");
+            categoryDescription = input.next();
             input.nextLine();
 
+
+            String firstLetter;
+            Character firstLetterCharacte;
+
+            Boolean flagLetter = false;
+
+            do {
+
+                System.out.print("unesi ime " + (i + 1) + ". kategorije: ");
+                categoryName = input.next();
+                firstLetter = String.valueOf(categoryName.charAt(0));
+                input.nextLine();
+
+                System.out.print("unesi opis " + (i + 1) + ". kategorije: ");
+                categoryDescription = input.next();
+                input.nextLine();
+
+
+
+                if (firstLetterArray[i].compareTo(String.valueOf(categoryName.charAt(0))) != 0){
+                    System.out.println("===UNESEN JE NAZIV KATEGORIJE SA ISTIM POCETNIM SLOVOM===");
+                    flagLetter = false;
+
+                }else {
+
+                    Category newCategory = new Category(categoryName,categoryDescription);
+                    categoryArray[i] = newCategory;
+                    flagLetter = true;
+                }
+
+
+            }while (flagLetter = true);
+
+
+        /*
             Category newCategory = new Category(categoryName,categoryDescription);
             categoryArray[i] = newCategory;
+
+         */
         }
     }
 }

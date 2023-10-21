@@ -12,7 +12,9 @@ public class Item {
     BigDecimal productionCost;
     BigDecimal sellingPrice;
 
-    public Item(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal lenght, BigDecimal productionCost, BigDecimal sellingPrice) {
+    Double taxRate;
+
+    public Item(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal lenght, BigDecimal productionCost, BigDecimal sellingPrice, Double taxRate) {
         this.name = name;
         this.category = category;
         this.width = width;
@@ -20,6 +22,7 @@ public class Item {
         this.lenght = lenght;
         this.productionCost = productionCost;
         this.sellingPrice = sellingPrice;
+        this.taxRate = taxRate;
     }
 
     public String getName() {
@@ -54,7 +57,7 @@ public class Item {
         this.height = height;
     }
 
-    public BigDecimal getLength() {
+    public BigDecimal getLenght() {
         return lenght;
     }
 
@@ -76,5 +79,13 @@ public class Item {
 
     public void setSellingPrice(BigDecimal sellingPrice) {
         this.sellingPrice = sellingPrice;
+    }
+
+    public Double getTaxRate() {
+        return taxRate;
+    }
+
+    public void setTaxRate(Double taxRate) {
+        this.taxRate = taxRate;
     }
 }
