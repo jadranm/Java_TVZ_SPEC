@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class Main2 {
-    private static final Integer NUMBER_OF_CATEGORIES = 2;  //3 kategorije
+    private static final Integer NUMBER_OF_CATEGORIES = 2;
     private static final Integer NUMBER_OF_ITEMS = 2;
     private static final Integer NUMBER_OF_FACTORIES = 2;
     private static final Integer NUMBER_OF_STORES = 2;
@@ -111,8 +111,8 @@ public class Main2 {
     }
 
     private static void factoryInput(Scanner input, Integer numberOfItemsPerFactory, Item[] chosenItemsArray, Item[] itemArray, Factory[] factoriesArray) {
-        for (int i = 0; i < NUMBER_OF_FACTORIES; i++){
-            System.out.print("Upisi ime "+ (i + 1) +". tvornice: ");
+        for (int i = 0; i < NUMBER_OF_FACTORIES; i++) {
+            System.out.print("Upisi ime " + (i + 1) + ". tvornice: ");
             String factoryName = input.next();
 
             //za adresu
@@ -132,11 +132,13 @@ public class Main2 {
             Address newAddress = new Address(streetName,houseNumber,city,postalCode);
 
              */
-            Address newAddress = new Address("gajeva","88","zd","10000");
 
-            for (int j = 0; j < numberOfItemsPerFactory; j++){
-                System.out.print("upisi koji se proizvod proizvodi u "+ (i + 1) + ". tvornici: ");
-                Integer chosenItemInFactory = input.nextInt();
+            Address newAddress = new Address("gajeva", "88", "zd", "10000");
+            Integer chosenItemInFactory = null;
+            /*
+            for (int j = 0; j < numberOfItemsPerFactory; j++) {
+                System.out.print("upisi koji se proizvod proizvodi u " + (i + 1) + ". tvornici: ");
+                chosenItemInFactory = input.nextInt();
 
 
                 //tu je problem
@@ -146,8 +148,39 @@ public class Main2 {
 
             Factory newFactory = new Factory(factoryName,newAddress, chosenItemsArray);
             factoriesArray[i] = newFactory;
+
+             */
         }
-    }
+
+                /*
+                Item factoryTemp[] = new Item[numberOfItemsPerFactory];
+
+                for (int i = 0; i < NUMBER_OF_ITEMS; i++) {
+                    int chosenItemInFactory = 0;
+
+                    System.out.print("upisi koji se proizvod proizvodi u " + (i + 1) + ". tvornici: ");
+                    chosenItemInFactory = input.nextInt();
+
+                    if (chosenItemInFactory == (i + 1)) {
+                        Item item = new Item(itemArray[i].getName(), itemArray[i].getCategory(), itemArray[i].getWidth(), itemArray[i].getHeight(), itemArray[i].getLength(), itemArray[i].getProductionCost(), itemArray[i].getSellingPrice());
+
+                        for (int l = 0; l < numberOfItemsPerFactory; l++) {
+
+                            if (factoryTemp[l] == null) {
+                                factoryTemp[l] = new Item(item.getName(), item.getCategory(), item.getWidth(), item.getHeight(), item.getLength(), item.getProductionCost(), item.getSellingPrice());
+                                break;
+                            }
+                        }
+                    }
+
+                 */
+                }
+
+
+
+
+
+
 
     private static void itemInput(Scanner input, Category[] categoryArray, Item[] itemArray) {
         for (int i = 0;i<NUMBER_OF_ITEMS;i++){
