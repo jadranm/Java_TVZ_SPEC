@@ -128,7 +128,6 @@ public class Main {
 
 
 
-
         Integer minWarranty = null;
         Integer minWarrantyIndex = 0;
 
@@ -217,11 +216,23 @@ public class Main {
 
     private static void itemInput(Scanner input, Category[] categoryArray, Item[] itemArray) {
         for (int i = 0;i<NUMBER_OF_ITEMS;i++){
-            System.out.println("da li je " + (i + 1) + ". proizvod preddefiniran: ");
-            System.out.println("=== y za da ===");
-            System.out.println("preddefinirani proizvodi: jabuka, zito, laptop");
-            String isItemPredefined = input.next();
 
+            String isItemPredefined;
+            do {
+
+                System.out.println("da li je " + (i + 1) + ". proizvod preddefiniran: ");
+                System.out.println("=== y za da === n za ne");
+                System.out.println("preddefinirani proizvodi: jabuka, zito, laptop");
+                isItemPredefined = input.next();
+
+                if (!isItemPredefined.equals("n") && !isItemPredefined.equals("y")){
+
+                    System.out.println();
+                    System.out.println("===KRIVI UNOS===");
+                    System.out.println();
+                }
+
+            }while (!isItemPredefined.equals("n") && !isItemPredefined.equals("y"));
 
 
             System.out.print("unesi ime " + (i + 1) + ". predmeta: ");
@@ -245,17 +256,25 @@ public class Main {
             }while (categoryIndex < 0 || categoryIndex > NUMBER_OF_CATEGORIES);
 
 
-            System.out.print("unesi sirinu predmeta: ");
-            BigDecimal itemWidth = input.nextBigDecimal();
-            input.nextLine();
+            //velicine jabuka i zita su hardkodirane
+            BigDecimal itemWidth = null;
+            BigDecimal itemHeight = null;
+            BigDecimal itemLenght = null;
 
-            System.out.print("unesi visinu predmeta: ");
-            BigDecimal itemHeight = input.nextBigDecimal();
-            input.nextLine();
 
-            System.out.print("unesi duzinu predmeta: ");
-            BigDecimal itemLenght = input.nextBigDecimal();
-            input.nextLine();
+            if (isItemPredefined.equals("n")) {
+                System.out.print("unesi sirinu predmeta: ");
+                itemWidth = input.nextBigDecimal();
+                input.nextLine();
+
+                System.out.print("unesi visinu predmeta: ");
+                itemHeight = input.nextBigDecimal();
+                input.nextLine();
+
+                System.out.print("unesi duzinu predmeta: ");
+                itemLenght = input.nextBigDecimal();
+                input.nextLine();
+            }
 
             System.out.print("unesi trosak proizvodnje: ");
             BigDecimal itemProductionCost = input.nextBigDecimal();
@@ -269,9 +288,8 @@ public class Main {
             BigDecimal itemDiscount = input.nextBigDecimal();
             input.nextLine();
 
+
             if (Objects.equals(isItemPredefined, "y")) {
-
-
                 System.out.print("odaberi proizvod:\n1. jabuka\n2. zito\n3. laptop\n");
                 Integer predefinedItem = input.nextInt();
                 input.nextLine();
@@ -281,7 +299,7 @@ public class Main {
                     BigDecimal weight = input.nextBigDecimal();
                     input.nextLine();
 
-                    Apple newApple = new Apple("jabuka", selectedCategory, itemWidth, itemHeight, itemLenght, itemProductionCost, itemSellingPrice,itemDiscount, weight);
+                    Apple newApple = new Apple(itemName, selectedCategory, BigDecimal.valueOf(2), BigDecimal.valueOf(2), BigDecimal.valueOf(2), itemProductionCost, itemSellingPrice,itemDiscount, weight);
                     itemArray[i] = newApple;
 
 
@@ -290,7 +308,7 @@ public class Main {
                     BigDecimal weight = input.nextBigDecimal();
                     input.nextLine();
 
-                    Wheat newWheat = new Wheat("zito", selectedCategory, itemWidth, itemHeight, itemLenght, itemProductionCost, itemSellingPrice,itemDiscount, weight);
+                    Wheat newWheat = new Wheat(itemName, selectedCategory, BigDecimal.valueOf(1), BigDecimal.valueOf(1), BigDecimal.valueOf(1), itemProductionCost, itemSellingPrice,itemDiscount, weight);
                     itemArray[i] = newWheat;
 
 
@@ -299,7 +317,7 @@ public class Main {
                     Integer warranty = input.nextInt();
                     input.nextLine();
 
-                    Laptop newLaptop = new Laptop("laptop",selectedCategory, itemWidth, itemHeight, itemLenght, itemProductionCost, itemSellingPrice, itemDiscount, warranty);
+                    Laptop newLaptop = new Laptop(itemName, selectedCategory, itemWidth, itemHeight, itemLenght, itemProductionCost, itemSellingPrice, itemDiscount, warranty);
                     itemArray[i] = newLaptop;
 
                     System.out.println(newLaptop.getWarrantyDuration());
