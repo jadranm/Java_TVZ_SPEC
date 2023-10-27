@@ -9,8 +9,8 @@ import java.util.Scanner;
 public class Main {
     private static final Integer NUMBER_OF_CATEGORIES = 2;
     private static final Integer NUMBER_OF_ITEMS = 2;
-    private static final Integer NUMBER_OF_FACTORIES = 2;
-    private static final Integer NUMBER_OF_STORES = 2;
+    private static final Integer NUMBER_OF_FACTORIES = 1;
+    private static final Integer NUMBER_OF_STORES = 1;
 
 
 
@@ -55,11 +55,10 @@ public class Main {
         storeInput(input, numberOfItemsPerStore, chosenItemsArray, itemArray, chosenStoreItemsArray, storeArray);
         System.out.println("__________________________________________________");
 
-
-        BigDecimal maxVolume = null;
-        Integer maxItemVolumeIndex = null;
-        Integer maxFactoryVolumeIndex = null;
-
+        /*
+        BigDecimal maxVolume = BigDecimal.ZERO;
+        Integer maxItemVolumeIndex = 0;
+        Integer maxFactoryVolumeIndex = 0;
 
         for (int i = 0; i < factoriesArray.length; i++) {
             Item[] newItem = factoriesArray[i].getItems();
@@ -67,22 +66,20 @@ public class Main {
             for (int j = 0; j < newItem.length; j++) {
 
                 BigDecimal itemVolume = newItem[j].getWidth().multiply(newItem[j].getHeight()).multiply(newItem[j].getLenght());
-                //izracun volumena radi
 
                 if (maxVolume == null || itemVolume.compareTo(maxVolume) > 0) {
                     maxVolume = itemVolume;
                     maxFactoryVolumeIndex = i;
                 }
             }
-
         }
 
 
         System.out.println("najveci volumen -> " + maxVolume);
         System.out.println("proizvela je tvornica -> " + factoriesArray[maxFactoryVolumeIndex].getName());
 
-        BigDecimal minPrice = null;
-        Integer minPriceStoreIndex = null;
+        BigDecimal minPrice = BigDecimal.ZERO;
+        Integer minPriceStoreIndex = 0;
 
         for (int i = 0; i < storeArray.length; i++) {
             Item[] newStoreItems = storeArray[i].getItems();
@@ -100,12 +97,12 @@ public class Main {
         System.out.println("Najmanja cijena -> " + minPrice);
         System.out.println("Ducan sa najmanjom cijenom -> " + storeArray[minPriceStoreIndex].getName());
 
-
+        */
         BigDecimal maxPriceWeight = BigDecimal.ZERO;
-        Integer maxPriceWeightIndex = null;
+        Integer maxPriceWeightIndex = 0;
 
         BigDecimal maxCalories = BigDecimal.ZERO;
-        Integer maxCaloriesIndex = null;
+        Integer maxCaloriesIndex = 0;
 
         for (int i=0;i<itemArray.length;i++){
             Item newItem = itemArray[i];
@@ -122,12 +119,32 @@ public class Main {
                 }
             }
         }
-        //nije testirano
+
         System.out.println("Najveca cijena s obzirom na masu -> " + itemArray[maxPriceWeightIndex].getName());
         System.out.println("Cijena -> " + maxPriceWeight);
 
         System.out.println("Najveci broj kalorija -> " + itemArray[maxCaloriesIndex].getName());
         System.out.println("Broj kalorija -> " + maxCalories);
+
+
+
+
+        Integer minWarranty = null;
+        Integer minWarrantyIndex = 0;
+
+        for (int i=0;i<itemArray.length;i++){
+            Item newItem = itemArray[i];
+
+            if(newItem instanceof Laptop laptop){
+
+                if (minWarranty == null || laptop.getWarrantyDuration().compareTo(minWarranty) < 0){
+                    minWarranty = laptop.getWarrantyDuration();
+                    minWarrantyIndex = i;
+                }
+            }
+        }
+        System.out.println("laptop sa najkracom garancijom -> " + itemArray[minWarrantyIndex].getName());
+        System.out.println("duljina garancije -> " + minWarranty);
 
     }
     private static void storeInput(Scanner input, Integer numberOfItemsPerStore, Item[] chosenItemsArray, Item[] itemArray, Item[] chosenStoreItemsArray, Store[] storeArray) {
@@ -139,7 +156,6 @@ public class Main {
             /*
             System.out.print("unesi web adresu ducana: ");
             String storeWebAddress = input.next();
-
              */
 
             Item[] newChosenStoreItem =  new Item[numberOfItemsPerStore];
@@ -201,8 +217,11 @@ public class Main {
 
     private static void itemInput(Scanner input, Category[] categoryArray, Item[] itemArray) {
         for (int i = 0;i<NUMBER_OF_ITEMS;i++){
-            System.out.print("da li je " + (i + 1) + ". proizvod hrana: ");
-            String itemIsFoodOrNot = input.next();
+            System.out.println("da li je " + (i + 1) + ". proizvod preddefiniran: ");
+            System.out.println("=== y za da ===");
+            System.out.println("preddefinirani proizvodi: jabuka, zito, laptop");
+            String isItemPredefined = input.next();
+
 
 
             System.out.print("unesi ime " + (i + 1) + ". predmeta: ");
@@ -250,32 +269,40 @@ public class Main {
             BigDecimal itemDiscount = input.nextBigDecimal();
             input.nextLine();
 
-            if (Objects.equals(itemIsFoodOrNot, "y")) {
-                System.out.print("unesi kolicinu namirnice u kilogramima: ");
-                BigDecimal weight = input.nextBigDecimal();
+            if (Objects.equals(isItemPredefined, "y")) {
+
+
+                System.out.print("odaberi proizvod:\n1. jabuka\n2. zito\n3. laptop\n");
+                Integer predefinedItem = input.nextInt();
                 input.nextLine();
 
-                System.out.print("odaberi namirnicu:\n1. jabuka\n2. zito\n");
-                Integer chosenFood = input.nextInt();
-                input.nextLine();
+                if (predefinedItem.equals(1)){
+                    System.out.print("unesi kolicinu namirnice u kilogramima: ");
+                    BigDecimal weight = input.nextBigDecimal();
+                    input.nextLine();
 
-                if (chosenFood.equals(1)){
                     Apple newApple = new Apple("jabuka", selectedCategory, itemWidth, itemHeight, itemLenght, itemProductionCost, itemSellingPrice,itemDiscount, weight);
                     itemArray[i] = newApple;
 
-                    /*
-                    System.out.println(newApple.calculatePrice());
-                    System.out.println(newApple.calculateCalories());
-                     */
 
-                }else if (chosenFood.equals(2)){
+                }else if (predefinedItem.equals(2)){
+                    System.out.print("unesi kolicinu namirnice u kilogramima: ");
+                    BigDecimal weight = input.nextBigDecimal();
+                    input.nextLine();
+
                     Wheat newWheat = new Wheat("zito", selectedCategory, itemWidth, itemHeight, itemLenght, itemProductionCost, itemSellingPrice,itemDiscount, weight);
                     itemArray[i] = newWheat;
 
-                    /*
-                    System.out.println(newWheat.calculatePrice());
-                    System.out.println(newWheat.calculateCalories());
-                     */
+
+                }else if(predefinedItem.equals(3)){
+                    System.out.print("koliko dugo traje garancija: ");
+                    Integer warranty = input.nextInt();
+                    input.nextLine();
+
+                    Laptop newLaptop = new Laptop("laptop",selectedCategory, itemWidth, itemHeight, itemLenght, itemProductionCost, itemSellingPrice, itemDiscount, warranty);
+                    itemArray[i] = newLaptop;
+
+                    System.out.println(newLaptop.getWarrantyDuration());
                 }
 
 

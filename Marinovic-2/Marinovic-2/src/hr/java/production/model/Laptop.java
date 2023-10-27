@@ -12,6 +12,6 @@ public final class Laptop extends Item implements Tehnical {
 
     @Override
     public Integer getWarrantyDuration() {
-        return null;
+        return warrantyPeriodInMonths;
     }
 }

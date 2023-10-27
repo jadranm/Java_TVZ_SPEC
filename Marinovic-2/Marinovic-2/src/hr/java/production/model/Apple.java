@@ -19,6 +19,8 @@ public class Apple extends Item implements Edible{
 
     @Override
     public BigDecimal calculatePrice() {
-        return weight.multiply(getSellingPrice());
+        BigDecimal discountedPrice = sellingPrice.subtract(sellingPrice.multiply(discountAmount.divide(BigDecimal.valueOf(100))));
+        return discountedPrice.multiply(weight);
+
     }
 }
