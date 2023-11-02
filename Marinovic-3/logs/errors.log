@@ -1,0 +1,8 @@
+2023-11-03 00:10:28,261 ERROR [main] h.j.p.m.Main [Main.java:252] unesen je isti item u tvornicuhr.java.production.exception.UniqueItemInFactoryException: korisnik je u tvornicu stavio item koji vec postoji
+2023-11-03 00:10:29,955 ERROR [main] h.j.p.m.Main [Main.java:252] unesen je isti item u tvornicuhr.java.production.exception.UniqueItemInFactoryException: korisnik je u tvornicu stavio item koji vec postoji
+2023-11-03 00:10:34,083 ERROR [main] h.j.p.m.Main [Main.java:252] unesen je isti item u tvornicuhr.java.production.exception.UniqueItemInFactoryException: korisnik je u tvornicu stavio item koji vec postoji
+2023-11-03 00:12:52,865 ERROR [main] h.j.p.m.Main [Main.java:253] unesen je isti item u tvornicuhr.java.production.exception.UniqueItemInFactoryException: korisnik je u tvornicu stavio item koji vec postoji
+2023-11-03 00:15:42,790 ERROR [main] h.j.p.m.Main [Main.java:253] unesen je isti item u tvornicuhr.java.production.exception.UniqueItemInFactoryException: korisnik je u tvornicu stavio item koji vec postoji
+2023-11-03 00:15:47,005 ERROR [main] h.j.p.m.Main [Main.java:253] unesen je isti item u tvornicuhr.java.production.exception.UniqueItemInFactoryException: korisnik je u tvornicu stavio item koji vec postoji
+2023-11-03 00:26:47,540 ERROR [main] h.j.p.m.Main [Main.java:419] uneseno je isto ime kategorijehr.java.production.exception.UniqueCategoryNameException: unesena kategorija vec postoji
+2023-11-03 00:26:52,986 ERROR [main] h.j.p.m.Main [Main.java:419] uneseno je isto ime kategorijehr.java.production.exception.UniqueCategoryNameException: unesena kategorija vec postoji
