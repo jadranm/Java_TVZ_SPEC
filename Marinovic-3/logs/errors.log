@@ -22,3 +22,6 @@
 2023-11-03 11:29:35,851 ERROR [main] h.j.p.m.Main [Main.java:374] unesene dimenzije proizvoda nisu tipa Integerjava.util.InputMismatchException
 2023-11-03 11:29:39,531 ERROR [main] h.j.p.m.Main [Main.java:374] unesene dimenzije proizvoda nisu tipa Integerjava.util.InputMismatchException
 2023-11-03 11:29:42,307 ERROR [main] h.j.p.m.Main [Main.java:374] unesene dimenzije proizvoda nisu tipa Integerjava.util.InputMismatchException
+2023-11-03 12:38:47,361 ERROR [main] h.j.p.m.Main [Main.java:502] uneseno je isto ime kategorije hr.java.production.exception.UniqueCategoryNameException: unesena kategorija vec postoji 
+2023-11-03 12:38:47,550 ERROR [main] h.j.p.m.Main [Main.java:502] uneseno je isto ime kategorije hr.java.production.exception.UniqueCategoryNameException: unesena kategorija vec postoji 
+2023-11-03 12:38:54,943 ERROR [main] h.j.p.m.Main [Main.java:358] Pri upisu kategorije upisan je podatak koji nije Integer java.util.InputMismatchException
