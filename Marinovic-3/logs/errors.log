@@ -6,3 +6,19 @@
 2023-11-03 00:15:47,005 ERROR [main] h.j.p.m.Main [Main.java:253] unesen je isti item u tvornicuhr.java.production.exception.UniqueItemInFactoryException: korisnik je u tvornicu stavio item koji vec postoji
 2023-11-03 00:26:47,540 ERROR [main] h.j.p.m.Main [Main.java:419] uneseno je isto ime kategorijehr.java.production.exception.UniqueCategoryNameException: unesena kategorija vec postoji
 2023-11-03 00:26:52,986 ERROR [main] h.j.p.m.Main [Main.java:419] uneseno je isto ime kategorijehr.java.production.exception.UniqueCategoryNameException: unesena kategorija vec postoji
+2023-11-03 01:04:20,389 ERROR [main] h.j.p.m.Main [Main.java:324] Upisan je podatak koji nije Integer java.util.InputMismatchException
+2023-11-03 01:04:25,451 ERROR [main] h.j.p.m.Main [Main.java:324] Upisan je podatak koji nije Integer java.util.InputMismatchException
+2023-11-03 01:09:21,751 ERROR [main] h.j.p.m.Main [Main.java:379] Upisan je podatak koji nije Integer java.util.InputMismatchException
+2023-11-03 01:09:23,492 ERROR [main] h.j.p.m.Main [Main.java:379] Upisan je podatak koji nije Integer java.util.InputMismatchException
+2023-11-03 01:10:45,851 ERROR [main] h.j.p.m.Main [Main.java:44] Upisan je podatak koji nije Integer java.util.InputMismatchException
+2023-11-03 01:10:49,798 ERROR [main] h.j.p.m.Main [Main.java:64] Upisan je podatak koji nije Integer java.util.InputMismatchException
+2023-11-03 01:11:03,496 ERROR [main] h.j.p.m.Main [Main.java:324] Upisan je podatak koji nije Integer java.util.InputMismatchException
+2023-11-03 01:12:04,805 ERROR [main] h.j.p.m.Main [Main.java:44] Upisan je podatak koji nije Integer java.util.InputMismatchException
+2023-11-03 01:12:41,923 ERROR [main] h.j.p.m.Main [Main.java:44] Upisan je podatak koji nije Integer java.util.InputMismatchException
+2023-11-03 01:12:45,387 ERROR [main] h.j.p.m.Main [Main.java:64] Upisan je podatak koji nije Integer java.util.InputMismatchException
+2023-11-03 01:12:59,147 ERROR [main] h.j.p.m.Main [Main.java:324] Pri upisu kategorije upisan je podatak koji nije Integer java.util.InputMismatchException
+2023-11-03 01:13:03,900 ERROR [main] h.j.p.m.Main [Main.java:324] Pri upisu kategorije upisan je podatak koji nije Integer java.util.InputMismatchException
+2023-11-03 11:29:33,869 ERROR [main] h.j.p.m.Main [Main.java:374] unesene dimenzije proizvoda nisu tipa Integerjava.util.InputMismatchException
+2023-11-03 11:29:35,851 ERROR [main] h.j.p.m.Main [Main.java:374] unesene dimenzije proizvoda nisu tipa Integerjava.util.InputMismatchException
+2023-11-03 11:29:39,531 ERROR [main] h.j.p.m.Main [Main.java:374] unesene dimenzije proizvoda nisu tipa Integerjava.util.InputMismatchException
+2023-11-03 11:29:42,307 ERROR [main] h.j.p.m.Main [Main.java:374] unesene dimenzije proizvoda nisu tipa Integerjava.util.InputMismatchException

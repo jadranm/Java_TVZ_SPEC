@@ -2,6 +2,9 @@ package hr.java.production.model;
 
 import java.math.BigDecimal;
 
+/**
+ * Predstavlja opću stavku s nazivom, kategorijom, dimenzijama, troškom proizvodnje, prodajnom cijenom i popustom.
+ */
 public class Item extends NamedEntity {
 
     Category category;
@@ -12,6 +15,19 @@ public class Item extends NamedEntity {
     BigDecimal sellingPrice;
     BigDecimal discountAmount;
 
+    /**
+     * Konstruktor za inicijalizaciju stavke sa zadanim nazivom, kategorijom, dimenzijama, troškom proizvodnje,
+     * prodajnom cijenom i popustom.
+     *
+     * @param name Naziv stavke.
+     * @param category Kategorija stavke.
+     * @param width Širina stavke.
+     * @param height Visina stavke.
+     * @param lenght Duljina stavke.
+     * @param productionCost Trošak proizvodnje stavke.
+     * @param sellingPrice Prodajna cijena stavke.
+     * @param discount Popust na cijenu stavke.
+     */
 
     public Item(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal lenght, BigDecimal productionCost, BigDecimal sellingPrice, BigDecimal discount) {
         super(name);

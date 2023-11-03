@@ -1,10 +1,20 @@
 package hr.java.production.model;
 
+/**
+ * Predstavlja trgovinu s nazivom, web adresom i popisom stavki koje prodaje.
+ */
 public class Store extends NamedEntity{
 
     String webAddress;
     Item[] items;
 
+    /**
+     * Konstruktor za inicijalizaciju trgovine sa zadanim nazivom, web adresom i popisom stavki.
+     *
+     * @param name Naziv trgovine.
+     * @param webAddress Web adresa trgovine.
+     * @param items Popis stavki koje trgovina prodaje.
+     */
     public Store(String name, String webAddress, Item[] items) {
         super(name);
         this.webAddress = webAddress;
