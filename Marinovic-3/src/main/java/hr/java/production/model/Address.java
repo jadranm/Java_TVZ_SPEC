@@ -1,11 +1,24 @@
 package hr.java.production.model;
 
+/**
+ * Predstavlja adresu s uličnom adresom, brojem kuće, gradom i poštanskim brojem.
+ */
+
 public class Address {
 
     String street;
     String houseNumber;
     String city;
     String postalCode;
+
+    /**
+     * Konstruktor za inicijalizaciju adrese sa zadanim podacima.
+     *
+     * @param street Ulica adrese.
+     * @param houseNumber Broj kuće ili stana.
+     * @param city Grad u kojem se adresa nalazi.
+     * @param postalCode Poštanski broj adrese.
+     */
 
     public Address(String street, String houseNumber, String city, String postalCode) {
         this.street = street;

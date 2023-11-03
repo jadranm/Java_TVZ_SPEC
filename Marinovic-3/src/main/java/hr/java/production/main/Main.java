@@ -69,9 +69,6 @@ public class Main {
 
 
 
-
-
-
         Category[] categoryArray = new Category[NUMBER_OF_CATEGORIES];
         Item[] itemArray = new Item[NUMBER_OF_ITEMS];
         Factory[] factoriesArray = new Factory[NUMBER_OF_FACTORIES];
@@ -184,6 +181,17 @@ public class Main {
         System.out.println("duljina garancije -> " + minWarranty);
 
     }
+
+    /**
+     * Metoda za unos podataka o dućanima i proizvodima koje prodaju.
+     *
+     * @param input Scanner objekt za unos podataka.
+     * @param numberOfItemsPerStore Broj stavki koje korisnik može odabrati za svaki dućan.
+     * @param chosenItemsArray Polje odabranih stavki.
+     * @param itemArray Polje svih dostupnih stavki.
+     * @param chosenStoreItemsArray Polje stavki koje su odabrane za pojedini dućan.
+     * @param storeArray Polje objekata klase Store za pohranu unesenih podataka o dućanima.
+     */
     private static void storeInput(Scanner input, Integer numberOfItemsPerStore, Item[] chosenItemsArray, Item[] itemArray, Item[] chosenStoreItemsArray, Store[] storeArray) {
         for (int i = 0; i < NUMBER_OF_STORES; i++) {
 
@@ -209,13 +217,22 @@ public class Main {
         }
     }
 
+    /**
+     * Metoda za unos podataka o tvornicama i proizvodima koje proizvode.
+     *
+     * @param input Scanner objekt za unos podataka.
+     * @param numberOfItemsPerFactory Broj stavki koje korisnik može odabrati za svaku tvornicu.
+     * @param chosenItemsArray Polje odabranih stavki.
+     * @param itemArray Polje svih dostupnih stavki.
+     * @param factoriesArray Polje objekata klase Factory za pohranu unesenih podataka o tvornicama.
+     */
     private static void factoryInput(Scanner input, Integer numberOfItemsPerFactory, Item[] chosenItemsArray, Item[] itemArray, Factory[] factoriesArray) {
         for (int i = 0; i < NUMBER_OF_FACTORIES; i++) {
             System.out.print("Upisi ime " + (i + 1) + ". tvornice: ");
             String factoryName = input.next();
 
-            //za adresu
             /*
+            //za adresu
             System.out.print("Upisi ulicu "+ (i + 1) +". tvornice: ");
             String streetName = input.next();
 
@@ -252,7 +269,7 @@ public class Main {
 
                     } catch (UniqueItemInFactoryException ex) {
                         System.out.println("u tvornicu je unesen isti item ");
-                        logger.error("unesen je isti item u tvornicu" + ex);
+                        logger.error("unesen je isti item u tvornicu " + ex);
                         uniqueItemFlag = true;
                     }
                     newChosenItemArray[j] = itemArray[chosenItemInFactoryIndex - 1];
@@ -268,16 +285,31 @@ public class Main {
 
     }
 
+    /**
+     * Provjerava je li novi proizvod jedinstven u odabranoj tvornici.
+     *
+     * @param newItem Proizvod koji se provjerava na jedinstvenost.
+     * @param chosenItemsArray Polje postojećih proizvoda u tvornici.
+     * @throws UniqueItemInFactoryException Ako se novi proizvod već nalazi u tvornici, baca se iznimka.
+     */
     private static void checkUniqueItemInFactory(Item newItem, Item[] chosenItemsArray) throws UniqueItemInFactoryException {
         for(Item item : chosenItemsArray){
             if (item != null){
                 if (newItem.equals(item)){
-                    throw new UniqueItemInFactoryException("korisnik je u tvornicu stavio item koji vec postoji");
+                    throw new UniqueItemInFactoryException("korisnik je u tvornicu stavio item koji vec postoji ");
                 }
             }
         }
     }
 
+
+    /**
+     * Metoda za unos podataka o predmetima (proizvodima).
+     *
+     * @param input Scanner objekt za unos podataka.
+     * @param categoryArray Polje dostupnih kategorija proizvoda.
+     * @param itemArray Polje objekata klase Item za pohranu unesenih podataka o proizvodima.
+     */
     private static void itemInput(Scanner input, Category[] categoryArray, Item[] itemArray) {
         for (int i = 0;i<NUMBER_OF_ITEMS;i++){
 
@@ -302,61 +334,104 @@ public class Main {
             System.out.print("unesi ime " + (i + 1) + ". predmeta: ");
             String itemName = input.next();
 
-
             Integer categoryIndex = -1;
             Category selectedCategory = null;
+
+            Boolean errorFlag;
+
             do {
+                errorFlag = false;
+                try {
+                    System.out.print("Odaberite kategoriju (1-" + NUMBER_OF_CATEGORIES + "): ");
+                    categoryIndex = input.nextInt();
 
-                System.out.print("Odaberite kategoriju (1-" + NUMBER_OF_CATEGORIES + "): ");
-                categoryIndex = input.nextInt();
+                    if (categoryIndex < 0 || categoryIndex > NUMBER_OF_CATEGORIES) {
+                        System.out.println("===UNESENA JE KATEGORIJA KOJA NE POSTOJI===");
 
+                    } else {
+                        selectedCategory = categoryArray[categoryIndex - 1];
+                    }
 
-                if (categoryIndex < 0 || categoryIndex > NUMBER_OF_CATEGORIES) {
-                    System.out.println("===UNESENA JE KATEGORIJA KOJA NE POSTOJI===");
-                }else {
-                    selectedCategory = categoryArray[categoryIndex - 1];
+                }catch (InputMismatchException ex){
+                    input.nextLine();
+                    System.out.println("Upisan je podatak koji nije Integer ");
+                    logger.error("Pri upisu kategorije upisan je podatak koji nije Integer " + ex);
+                    errorFlag = true;
+
                 }
-
-            }while (categoryIndex < 0 || categoryIndex > NUMBER_OF_CATEGORIES);
+            }while (errorFlag || categoryIndex < 0 || categoryIndex > NUMBER_OF_CATEGORIES);
 
 
             //velicine jabuka i zita su hardkodirane
-            BigDecimal itemWidth = null;
-            BigDecimal itemHeight = null;
-            BigDecimal itemLenght = null;
+            BigDecimal itemLenght = null,
+                    itemHeight = null,
+                    itemWidth = null,
+                    itemProductionCost = null,
+                    itemSellingPrice = null,
+                    itemDiscount = null;
 
+            Boolean mesurmentsError;
 
-            if (isItemPredefined.equals("n")) {
-                System.out.print("unesi sirinu predmeta: ");
-                itemWidth = input.nextBigDecimal();
+        do {
+            mesurmentsError = false;
+            try {
+                if (isItemPredefined.equals("n")) {
+                    System.out.print("unesi sirinu predmeta: ");
+                    itemWidth = input.nextBigDecimal();
+                    input.nextLine();
+
+                    System.out.print("unesi visinu predmeta: ");
+                    itemHeight = input.nextBigDecimal();
+                    input.nextLine();
+
+                    System.out.print("unesi duzinu predmeta: ");
+                    itemLenght = input.nextBigDecimal();
+                    input.nextLine();
+                }
+
+                System.out.print("unesi trosak proizvodnje: ");
+                itemProductionCost = input.nextBigDecimal();
                 input.nextLine();
 
-                System.out.print("unesi visinu predmeta: ");
-                itemHeight = input.nextBigDecimal();
+                System.out.print("unesi cijenu: ");
+                itemSellingPrice = input.nextBigDecimal();
                 input.nextLine();
 
-                System.out.print("unesi duzinu predmeta: ");
-                itemLenght = input.nextBigDecimal();
+                System.out.print("unesi popust u postotku: ");
+                itemDiscount = input.nextBigDecimal();
                 input.nextLine();
+
+            }catch (InputMismatchException ex){
+                input.nextLine();
+                System.out.println("unesene dimenzije proizvoda nisu tipa Integer ");
+                logger.error("unesene dimenzije proizvoda nisu tipa Integer " + ex);
+                mesurmentsError = true;
             }
-
-            System.out.print("unesi trosak proizvodnje: ");
-            BigDecimal itemProductionCost = input.nextBigDecimal();
-            input.nextLine();
-
-            System.out.print("unesi cijenu: ");
-            BigDecimal itemSellingPrice = input.nextBigDecimal();
-            input.nextLine();
-
-            System.out.print("unesi popust u postotku: ");
-            BigDecimal itemDiscount = input.nextBigDecimal();
-            input.nextLine();
-
+        }while (mesurmentsError);
 
             if (Objects.equals(isItemPredefined, "y")) {
-                System.out.print("odaberi proizvod:\n1. jabuka\n2. zito\n3. laptop\n");
-                Integer predefinedItem = input.nextInt();
-                input.nextLine();
+
+                Integer predefinedItem = null;
+                Boolean itemErrorFlag;
+
+                do {
+                    itemErrorFlag = false;
+                    try {
+                        System.out.print("odaberi proizvod:\n1. jabuka\n2. zito\n3. laptop\n");
+                        predefinedItem = input.nextInt();
+                        input.nextLine();
+
+                    } catch (InputMismatchException ex) {
+                        itemErrorFlag = true;
+                        input.nextLine();
+                        System.out.println("Pri odabiru preddefiniranog proizvoda upisan je podatak koji nije Integer ");
+                        logger.error("Pri odabiru preddefiniranog proizvoda upisan je podatak koji nije Integer " + ex);
+                        errorFlag = true;
+
+                    }
+                }while (itemErrorFlag || predefinedItem < 0);
+
+
 
                 if (predefinedItem.equals(1)){
                     System.out.print("unesi kolicinu namirnice u kilogramima: ");
@@ -395,6 +470,12 @@ public class Main {
         }
     }
 
+    /**
+     * Metoda za unos podataka o kategorijama proizvoda.
+     *
+     * @param input Scanner objekt za unos podataka.
+     * @param categoryArray Polje objekata klase Category za pohranu unesenih podataka o kategorijama.
+     */
     private static void categoryInput(Scanner input, Category[] categoryArray) {
 
         for (int i = 0;i < NUMBER_OF_CATEGORIES; i++) {
@@ -403,7 +484,7 @@ public class Main {
             String categoryDescription;
 
             Category newCategory;
-            Boolean uniqueItemFlag = false;
+            Boolean uniqueItemFlag;
 
             //radi ok
             do {
@@ -418,7 +499,7 @@ public class Main {
 
                 } catch (UniqueCategoryNameException ex) {
                     System.out.println("uneseno je isto ime kategorije ");
-                    logger.error("uneseno je isto ime kategorije" + ex);
+                    logger.error("uneseno je isto ime kategorije " + ex);
                     uniqueItemFlag = true;
                 }
             }while (uniqueItemFlag);
@@ -434,11 +515,18 @@ public class Main {
         }
     }
 
+    /**
+     * Provjerava je li uneseno ime kategorije jedinstveno u odnosu na postojeće kategorije.
+     *
+     * @param categoryName Ime kategorije koje se provjerava na jedinstvenost.
+     * @param categoryArray Polje postojećih kategorija.
+     * @throws UniqueCategoryNameException Ako se uneseno ime kategorije već nalazi među postojećim kategorijama, baca se iznimka.
+     */
     private static void checkUniqueCategoryName(String categoryName, Category[] categoryArray) throws UniqueCategoryNameException {
         for (Category newCategory : categoryArray){
             if (newCategory != null){
                 if (categoryName.equals(newCategory.getName())){
-                    throw new UniqueCategoryNameException("unesena kategorija vec postoji");
+                    throw new UniqueCategoryNameException("unesena kategorija vec postoji ");
                 }
             }
         }

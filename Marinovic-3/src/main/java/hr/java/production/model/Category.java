@@ -1,9 +1,18 @@
 package hr.java.production.model;
 
+/**
+ * Predstavlja kategoriju koja ima naziv i opis.
+ */
 public class Category extends NamedEntity {
 
     String description;
 
+    /**
+     * Konstruktor za inicijalizaciju kategorije sa zadanim nazivom i opisom.
+     *
+     * @param name Naziv kategorije.
+     * @param description Opis kategorije.
+     */
     public Category(String name, String description) {
         super(name);
         this.description = description;
