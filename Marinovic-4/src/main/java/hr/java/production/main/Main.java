@@ -14,7 +14,7 @@ import java.util.*;
 
 public class Main {
     private static final Integer NUMBER_OF_CATEGORIES = 2;
-    private static final Integer NUMBER_OF_ITEMS = 6;
+    private static final Integer NUMBER_OF_ITEMS = 2;
     private static final Integer NUMBER_OF_FACTORIES = 1;
     private static final Integer NUMBER_OF_STORES = 1;
 
@@ -299,44 +299,56 @@ public class Main {
 
 
             //za adresu
-            System.out.println("da li je grad preddefiniran y za da n za ne");
-            System.out.println("Preddefinirani gradovi Zagreb, Split, Osijek, Rijeka ");
-            String isCityPredefined = input.next();
 
-            String city, postalCode;
+            String isCityPredefined;
+            String city = null, postalCode = null;
 
-            if (isCityPredefined.equals("y")){
-                System.out.println("upisi redni brog grada: ");
-                Integer chosenCity = input.nextInt();
+            do {
+                System.out.println("da li je grad preddefiniran y za da n za ne");
+                System.out.println("Preddefinirani gradovi Zagreb, Split, Osijek, Rijeka ");
+                isCityPredefined = input.next();
 
-                if (chosenCity.equals(1)){
-                    Cities newCity = Cities.ZAGREB;
-                    city = newCity.getCityName();
-                    postalCode = newCity.getZipCode();
+                if (isCityPredefined.equals("y")) {
 
-                }else if (chosenCity.equals(2)){
-                    Cities newCity = Cities.SPLIT;
-                    city = newCity.getCityName();
-                    postalCode = newCity.getZipCode();
+                    System.out.println("upisi redni brog grada: ");
+                    Integer chosenCity = input.nextInt();
 
-                }else if (chosenCity.equals(3)){
-                    Cities newCity = Cities.OSIJEK;
-                    city = newCity.getCityName();
-                    postalCode = newCity.getZipCode();
+                    if (chosenCity.equals(1)) {
+                        Cities newCity = Cities.ZAGREB;
+                        city = newCity.getCityName();
+                        postalCode = newCity.getZipCode();
 
-                }else {
-                    Cities newCity = Cities.RIJEKA;
-                    city = newCity.getCityName();
-                    postalCode = newCity.getZipCode();
+                    } else if (chosenCity.equals(2)) {
+                        Cities newCity = Cities.SPLIT;
+                        city = newCity.getCityName();
+                        postalCode = newCity.getZipCode();
+
+                    } else if (chosenCity.equals(3)) {
+                        Cities newCity = Cities.OSIJEK;
+                        city = newCity.getCityName();
+                        postalCode = newCity.getZipCode();
+
+                    } else if (chosenCity.equals(4)){
+                        Cities newCity = Cities.RIJEKA;
+                        city = newCity.getCityName();
+                        postalCode = newCity.getZipCode();
+                    }
+
+                } else if (isCityPredefined.equals("n")) {
+                    System.out.print("Upisi grad u kojem se nalazi " + (i + 1) + ". tvornica: ");
+                    city = input.next();
+
+                    System.out.print("Upisi postanski broj " + (i + 1) + ". tvornice: ");
+                    postalCode = input.next();
                 }
 
-            }else {
-                System.out.print("Upisi grad u kojem se nalazi "+ (i + 1) +". tvornica: ");
-                city = input.next();
+                if (!isCityPredefined.equals("n") && !isCityPredefined.equals("y")){
+                    System.out.println();
+                    System.out.println("===KRIVI UNOS===");
+                    System.out.println();
+                }
 
-                System.out.print("Upisi postanski broj "+ (i + 1) +". tvornice: ");
-                postalCode = input.next();
-            }
+            }while (!isCityPredefined.equals("n") && !isCityPredefined.equals("y"));
 
             /*
             System.out.print("Upisi ulicu "+ (i + 1) +". tvornice: ");
@@ -533,46 +545,61 @@ public class Main {
                         input.nextLine();
                         System.out.println("Pri odabiru preddefiniranog proizvoda upisan je podatak koji nije Integer ");
                         logger.error("Pri odabiru preddefiniranog proizvoda upisan je podatak koji nije Integer " + ex);
-                        errorFlag = true;
+
 
                     }
                 } while (itemErrorFlag || predefinedItem < 0);
 
-
-                if (predefinedItem.equals(1)) {
-                    System.out.print("unesi kolicinu namirnice u kilogramima: ");
-                    BigDecimal weight = input.nextBigDecimal();
-                    input.nextLine();
-
-                    Apple newApple = new Apple(itemName, selectedCategory, BigDecimal.valueOf(2), BigDecimal.valueOf(2), BigDecimal.valueOf(2), itemProductionCost, itemSellingPrice, itemDiscount, weight);
-                    itemList.add(newApple);
+                Boolean itemWeightErrorFlag;
+                do {
+                    itemWeightErrorFlag = false;
+                    try {
 
 
-                } else if (predefinedItem.equals(2)) {
-                    System.out.print("unesi kolicinu namirnice u kilogramima: ");
-                    BigDecimal weight = input.nextBigDecimal();
-                    input.nextLine();
+                        if (predefinedItem.equals(1)) {
+                            System.out.print("unesi kolicinu namirnice u kilogramima: ");
+                            BigDecimal weight = input.nextBigDecimal();
+                            input.nextLine();
 
-                    Wheat newWheat = new Wheat(itemName, selectedCategory, BigDecimal.valueOf(1), BigDecimal.valueOf(1), BigDecimal.valueOf(1), itemProductionCost, itemSellingPrice, itemDiscount, weight);
-                    itemList.add(newWheat);
+                            Apple newApple = new Apple(itemName, selectedCategory, BigDecimal.valueOf(2), BigDecimal.valueOf(2), BigDecimal.valueOf(2), itemProductionCost, itemSellingPrice, itemDiscount, weight);
+                            itemList.add(newApple);
 
 
-                } else if (predefinedItem.equals(3)) {
-                    System.out.print("koliko dugo traje garancija: ");
-                    Integer warranty = input.nextInt();
-                    input.nextLine();
+                        } else if (predefinedItem.equals(2)) {
+                            System.out.print("unesi kolicinu namirnice u kilogramima: ");
+                            BigDecimal weight = input.nextBigDecimal();
+                            input.nextLine();
 
-                    Laptop newLaptop = new Laptop(itemName, selectedCategory, itemWidth, itemHeight, itemLenght, itemProductionCost, itemSellingPrice, itemDiscount, warranty);
-                    itemList.add(newLaptop);
+                            Wheat newWheat = new Wheat(itemName, selectedCategory, BigDecimal.valueOf(1), BigDecimal.valueOf(1), BigDecimal.valueOf(1), itemProductionCost, itemSellingPrice, itemDiscount, weight);
+                            itemList.add(newWheat);
 
-                    System.out.println(newLaptop.getWarrantyDuration());
-                }
+
+                        } else if (predefinedItem.equals(3)) {
+                            System.out.print("koliko dugo traje garancija: ");
+                            Integer warranty = input.nextInt();
+                            input.nextLine();
+
+                            Laptop newLaptop = new Laptop(itemName, selectedCategory, itemWidth, itemHeight, itemLenght, itemProductionCost, itemSellingPrice, itemDiscount, warranty);
+                            itemList.add(newLaptop);
+
+                            System.out.println(newLaptop.getWarrantyDuration());
+                        }
+                    }catch (InputMismatchException ex){
+                        itemWeightErrorFlag = true;
+                        input.nextLine();
+                        System.out.println("Pri odabiru kolicine proizvoda ili duljine garancije upisan je podatak koji nije Integer ");
+                        logger.error("Pri odabiru kolicine proizvoda ili duljine garancije upisan je podatak koji nije Integer " + ex);
+                    }
+
+                }while (itemWeightErrorFlag);
+
 
 
             } else {
                 Item newItem = new Item(itemName, selectedCategory, itemWidth, itemHeight, itemLenght, itemProductionCost, itemSellingPrice, itemDiscount);
                 itemList.add(newItem);
             }
+
         }
             for (int i = 0;i<NUMBER_OF_CATEGORIES;i++) {
                 List<Item> listWithSameCategory = new ArrayList<>();
