@@ -1,5 +1,7 @@
 package hr.java.production.model;
 
+import java.util.Objects;
+
 /**
  * Predstavlja kategoriju koja ima naziv i opis.
  */
@@ -34,5 +36,19 @@ public class Category extends NamedEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Category category = (Category) o;
+        return Objects.equals(description, category.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), description);
     }
 }
