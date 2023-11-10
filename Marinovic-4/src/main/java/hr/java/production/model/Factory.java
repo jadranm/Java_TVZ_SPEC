@@ -1,6 +1,8 @@
 package hr.java.production.model;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Predstavlja tvornicu s nazivom, adresom i popisom stavki koje proizvodi.
@@ -45,5 +47,21 @@ public class Factory extends NamedEntity {
 
     public void setItems(Item[] items) {
         this.items = items;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Factory factory = (Factory) o;
+        return Objects.equals(address, factory.address) && Arrays.equals(items, factory.items);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(super.hashCode(), address);
+        result = 31 * result + Arrays.hashCode(items);
+        return result;
     }
 }

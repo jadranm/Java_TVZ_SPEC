@@ -1,8 +1,10 @@
 package hr.java.production.main;
 
+import hr.java.production.enumeration.Cities;
 import hr.java.production.exception.UniqueCategoryNameException;
 import hr.java.production.exception.UniqueItemInFactoryException;
 import hr.java.production.model.*;
+import hr.java.production.sort.ProductionSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +14,7 @@ import java.util.*;
 
 public class Main {
     private static final Integer NUMBER_OF_CATEGORIES = 2;
-    private static final Integer NUMBER_OF_ITEMS = 2;
+    private static final Integer NUMBER_OF_ITEMS = 6;
     private static final Integer NUMBER_OF_FACTORIES = 1;
     private static final Integer NUMBER_OF_STORES = 1;
 
@@ -74,11 +76,14 @@ public class Main {
         List<Item> chosenStoreItemsList = new ArrayList<>();
         List<Item> chosenItemsList = new ArrayList<>();
 
+        Map<Category,List<Item>> categoryItemMap = new HashMap<>();
+
+
 
         categoryInput(input, categoryArray);
         System.out.println("__________________________________________________");
 
-        itemInput(input, categoryArray, itemList);
+        itemInput(input, categoryArray, itemList,categoryItemMap);
         System.out.println("__________________________________________________");
 
         factoryInput(input, numberOfItemsPerFactory, chosenItemsList, itemList, factoriesArray);
@@ -87,6 +92,7 @@ public class Main {
         storeInput(input, numberOfItemsPerStore, chosenItemsList, itemList, chosenStoreItemsList, storeArray);
         System.out.println("__________________________________________________");
 
+        System.out.println("__________________________________________________");
         /*
         BigDecimal maxVolume = BigDecimal.ZERO;
         Integer maxItemVolumeIndex = 0;
@@ -136,6 +142,7 @@ public class Main {
         BigDecimal maxCalories = BigDecimal.ZERO;
         Integer maxCaloriesIndex = 0;
 
+        /*
         for (int i=0;i<itemList.size();i++){
             Item newItem = itemList.get(i);
 
@@ -176,6 +183,65 @@ public class Main {
         }
         System.out.println("laptop sa najkracom garancijom -> " + itemList.get(minWarrantyIndex).getName());
         System.out.println("duljina garancije -> " + minWarranty);
+
+
+         */
+
+        Collections.sort(itemList, new ProductionSorter(true));
+        //itemList.stream().forEach(System.out :: println);
+
+        for (int i = 0;i < NUMBER_OF_CATEGORIES;i++){
+            Category mapKey = categoryArray[i];
+
+            if (!categoryItemMap.get(mapKey).isEmpty()) {
+                System.out.println("min i max za kategoriju " + mapKey.getName());
+                System.out.println();
+                Collections.sort(categoryItemMap.get(mapKey),new ProductionSorter(true));
+                System.out.println("minumum -> " + categoryItemMap.get(mapKey).getFirst().getName() + " "
+                        + categoryItemMap.get(mapKey).getFirst().getSellingPrice());
+
+                System.out.println("maksimum -> " + categoryItemMap.get(mapKey).getLast().getName() + " "
+                        + categoryItemMap.get(mapKey).getLast().getSellingPrice());
+            }
+
+        }
+        List<Item> listOfEdibleItems = new ArrayList<>();
+        List<Item> listOfTehnicalItems = new ArrayList<>();
+
+        for (Item newItem : itemList){
+            if (newItem instanceof Edible){
+                listOfEdibleItems.add(newItem);
+            }else if (newItem instanceof Tehnical){
+                listOfTehnicalItems.add(newItem);
+            }
+        }
+
+        if (!listOfEdibleItems.isEmpty()) {
+            System.out.println("min i max jestivih predmeta");
+            Collections.sort(listOfEdibleItems, new ProductionSorter(true));
+
+            System.out.println("min -> " + listOfEdibleItems.getFirst().getName() + " "
+                    + listOfEdibleItems.getFirst().getSellingPrice());
+
+            System.out.println("max -> " + listOfEdibleItems.getLast().getName() + " "
+                    + listOfEdibleItems.getLast().getSellingPrice());
+        }
+
+        if (!listOfTehnicalItems.isEmpty()) {
+            System.out.println("min i max tehnickih predmeta");
+            Collections.sort(listOfTehnicalItems, new ProductionSorter(true));
+
+            System.out.println("min -> " + listOfTehnicalItems.getFirst().getName() + " "
+                    + listOfTehnicalItems.getFirst().getSellingPrice());
+
+            System.out.println("max -> " + listOfTehnicalItems.getLast().getName() + " "
+                    + listOfTehnicalItems.getLast().getSellingPrice());
+        }
+
+
+        //----------------
+        //Kraj main metode
+        //----------------
 
     }
 
@@ -233,23 +299,58 @@ public class Main {
 
 
             //za adresu
+            System.out.println("da li je grad preddefiniran y za da n za ne");
+            System.out.println("Preddefinirani gradovi Zagreb, Split, Osijek, Rijeka ");
+            String isCityPredefined = input.next();
+
+            String city, postalCode;
+
+            if (isCityPredefined.equals("y")){
+                System.out.println("upisi redni brog grada: ");
+                Integer chosenCity = input.nextInt();
+
+                if (chosenCity.equals(1)){
+                    Cities newCity = Cities.ZAGREB;
+                    city = newCity.getCityName();
+                    postalCode = newCity.getZipCode();
+
+                }else if (chosenCity.equals(2)){
+                    Cities newCity = Cities.SPLIT;
+                    city = newCity.getCityName();
+                    postalCode = newCity.getZipCode();
+
+                }else if (chosenCity.equals(3)){
+                    Cities newCity = Cities.OSIJEK;
+                    city = newCity.getCityName();
+                    postalCode = newCity.getZipCode();
+
+                }else {
+                    Cities newCity = Cities.RIJEKA;
+                    city = newCity.getCityName();
+                    postalCode = newCity.getZipCode();
+                }
+
+            }else {
+                System.out.print("Upisi grad u kojem se nalazi "+ (i + 1) +". tvornica: ");
+                city = input.next();
+
+                System.out.print("Upisi postanski broj "+ (i + 1) +". tvornice: ");
+                postalCode = input.next();
+            }
+
+            /*
             System.out.print("Upisi ulicu "+ (i + 1) +". tvornice: ");
             String streetName = input.next();
 
             System.out.print("Upisi kucni broj "+ (i + 1) +". tvornice: ");
             String houseNumber = input.next();
 
-            System.out.print("Upisi grad u kojem se nalazi "+ (i + 1) +". tvornica: ");
-            String city = input.next();
+            */
 
-            System.out.print("Upisi postanski broj "+ (i + 1) +". tvornice: ");
-            String postalCode = input.next();
-
-            Address newAddress = new Address(streetName,houseNumber,city,postalCode);
+            Address newAddress = new Address("harkodirano","11",city,postalCode);
 
 
-
-            //Address newAddress = new Address("gajeva", "88", "zd", "10000");
+            //Address newAddress = new Address("gajeva", "88", "zd", "10000");1
             List<Item> newChosenItemList = new ArrayList<>();
 
             Integer chosenItemInFactoryIndex = -1;
@@ -273,7 +374,6 @@ public class Main {
                         logger.error("unesen je isti item u tvornicu " + ex);
                         uniqueItemFlag = true;
                     }
-                    //newChosenItemArray[j] = itemArray[chosenItemInFactoryIndex - 1];
 
 
                 }while (uniqueItemFlag);
@@ -281,6 +381,8 @@ public class Main {
 
             Factory newFactory = new Factory(factoryName,newAddress, newChosenItemList);
             factoriesArray[i] = newFactory;
+
+
 
 
         }
@@ -312,8 +414,8 @@ public class Main {
      * @param categoryArray Polje dostupnih kategorija proizvoda.
      * @param itemList Lista objekata klase Item za pohranu unesenih podataka o proizvodima.
      */
-    private static void itemInput(Scanner input, Category[] categoryArray, List<Item> itemList) {
-        for (int i = 0;i<NUMBER_OF_ITEMS;i++){
+    private static void itemInput(Scanner input, Category[] categoryArray, List<Item> itemList, Map categoryItemMap) {
+        for (int i = 0;i<NUMBER_OF_ITEMS;i++) {
 
             String isItemPredefined;
             do {
@@ -323,14 +425,14 @@ public class Main {
                 System.out.println("preddefinirani proizvodi: jabuka, zito, laptop");
                 isItemPredefined = input.next();
 
-                if (!isItemPredefined.equals("n") && !isItemPredefined.equals("y")){
+                if (!isItemPredefined.equals("n") && !isItemPredefined.equals("y")) {
 
                     System.out.println();
                     System.out.println("===KRIVI UNOS===");
                     System.out.println();
                 }
 
-            }while (!isItemPredefined.equals("n") && !isItemPredefined.equals("y"));
+            } while (!isItemPredefined.equals("n") && !isItemPredefined.equals("y"));
 
 
             System.out.print("unesi ime " + (i + 1) + ". predmeta: ");
@@ -347,21 +449,23 @@ public class Main {
                     System.out.print("Odaberite kategoriju (1-" + NUMBER_OF_CATEGORIES + "): ");
                     categoryIndex = input.nextInt();
 
+
                     if (categoryIndex < 0 || categoryIndex > NUMBER_OF_CATEGORIES) {
                         System.out.println("===UNESENA JE KATEGORIJA KOJA NE POSTOJI===");
 
                     } else {
                         selectedCategory = categoryArray[categoryIndex - 1];
+
                     }
 
-                }catch (InputMismatchException ex){
+                } catch (InputMismatchException ex) {
                     input.nextLine();
                     System.out.println("Upisan je podatak koji nije Integer ");
                     logger.error("Pri upisu kategorije upisan je podatak koji nije Integer " + ex);
                     errorFlag = true;
 
                 }
-            }while (errorFlag || categoryIndex < 0 || categoryIndex > NUMBER_OF_CATEGORIES);
+            } while (errorFlag || categoryIndex < 0 || categoryIndex > NUMBER_OF_CATEGORIES);
 
 
             //velicine jabuka i zita su hardkodirane
@@ -374,42 +478,43 @@ public class Main {
 
             Boolean mesurmentsError;
 
-        do {
-            mesurmentsError = false;
-            try {
-                if (isItemPredefined.equals("n")) {
-                    System.out.print("unesi sirinu predmeta: ");
-                    itemWidth = input.nextBigDecimal();
+            do {
+                mesurmentsError = false;
+                try {
+                    if (isItemPredefined.equals("n")) {
+                        System.out.print("unesi sirinu predmeta: ");
+                        itemWidth = input.nextBigDecimal();
+                        input.nextLine();
+
+                        System.out.print("unesi visinu predmeta: ");
+                        itemHeight = input.nextBigDecimal();
+                        input.nextLine();
+
+                        System.out.print("unesi duzinu predmeta: ");
+                        itemLenght = input.nextBigDecimal();
+                        input.nextLine();
+                    }
+
+                    System.out.print("unesi trosak proizvodnje: ");
+                    itemProductionCost = input.nextBigDecimal();
                     input.nextLine();
 
-                    System.out.print("unesi visinu predmeta: ");
-                    itemHeight = input.nextBigDecimal();
+                    System.out.print("unesi cijenu: ");
+                    itemSellingPrice = input.nextBigDecimal();
                     input.nextLine();
 
-                    System.out.print("unesi duzinu predmeta: ");
-                    itemLenght = input.nextBigDecimal();
+                    System.out.print("unesi popust u postotku: ");
+                    itemDiscount = input.nextBigDecimal();
                     input.nextLine();
+
+                } catch (InputMismatchException ex) {
+                    input.nextLine();
+                    System.out.println("unesene dimenzije proizvoda nisu tipa Integer ");
+                    logger.error("unesene dimenzije proizvoda nisu tipa Integer " + ex);
+                    mesurmentsError = true;
                 }
+            } while (mesurmentsError);
 
-                System.out.print("unesi trosak proizvodnje: ");
-                itemProductionCost = input.nextBigDecimal();
-                input.nextLine();
-
-                System.out.print("unesi cijenu: ");
-                itemSellingPrice = input.nextBigDecimal();
-                input.nextLine();
-
-                System.out.print("unesi popust u postotku: ");
-                itemDiscount = input.nextBigDecimal();
-                input.nextLine();
-
-            }catch (InputMismatchException ex){
-                input.nextLine();
-                System.out.println("unesene dimenzije proizvoda nisu tipa Integer ");
-                logger.error("unesene dimenzije proizvoda nisu tipa Integer " + ex);
-                mesurmentsError = true;
-            }
-        }while (mesurmentsError);
 
             if (Objects.equals(isItemPredefined, "y")) {
 
@@ -431,29 +536,28 @@ public class Main {
                         errorFlag = true;
 
                     }
-                }while (itemErrorFlag || predefinedItem < 0);
+                } while (itemErrorFlag || predefinedItem < 0);
 
 
-
-                if (predefinedItem.equals(1)){
+                if (predefinedItem.equals(1)) {
                     System.out.print("unesi kolicinu namirnice u kilogramima: ");
                     BigDecimal weight = input.nextBigDecimal();
                     input.nextLine();
 
-                    Apple newApple = new Apple(itemName, selectedCategory, BigDecimal.valueOf(2), BigDecimal.valueOf(2), BigDecimal.valueOf(2), itemProductionCost, itemSellingPrice,itemDiscount, weight);
+                    Apple newApple = new Apple(itemName, selectedCategory, BigDecimal.valueOf(2), BigDecimal.valueOf(2), BigDecimal.valueOf(2), itemProductionCost, itemSellingPrice, itemDiscount, weight);
                     itemList.add(newApple);
 
 
-                }else if (predefinedItem.equals(2)){
+                } else if (predefinedItem.equals(2)) {
                     System.out.print("unesi kolicinu namirnice u kilogramima: ");
                     BigDecimal weight = input.nextBigDecimal();
                     input.nextLine();
 
-                    Wheat newWheat = new Wheat(itemName, selectedCategory, BigDecimal.valueOf(1), BigDecimal.valueOf(1), BigDecimal.valueOf(1), itemProductionCost, itemSellingPrice,itemDiscount, weight);
+                    Wheat newWheat = new Wheat(itemName, selectedCategory, BigDecimal.valueOf(1), BigDecimal.valueOf(1), BigDecimal.valueOf(1), itemProductionCost, itemSellingPrice, itemDiscount, weight);
                     itemList.add(newWheat);
 
 
-                }else if(predefinedItem.equals(3)){
+                } else if (predefinedItem.equals(3)) {
                     System.out.print("koliko dugo traje garancija: ");
                     Integer warranty = input.nextInt();
                     input.nextLine();
@@ -465,11 +569,32 @@ public class Main {
                 }
 
 
-            }else {
-                Item newItem = new Item(itemName, selectedCategory, itemWidth, itemHeight, itemLenght, itemProductionCost, itemSellingPrice,itemDiscount);
+            } else {
+                Item newItem = new Item(itemName, selectedCategory, itemWidth, itemHeight, itemLenght, itemProductionCost, itemSellingPrice, itemDiscount);
                 itemList.add(newItem);
             }
         }
+            for (int i = 0;i<NUMBER_OF_CATEGORIES;i++) {
+                List<Item> listWithSameCategory = new ArrayList<>();
+
+                String searchedCategoryName = categoryArray[i].getName();
+
+                for (Item newItem : itemList) {
+                    Category newItemCategory = newItem.getCategory();
+                    String newItemCategoryName = newItemCategory.getName();
+
+                    if (searchedCategoryName.equals(newItemCategoryName)){
+                        listWithSameCategory.add(newItem);
+                    }
+                }
+                categoryItemMap.put(categoryArray[i],listWithSameCategory);
+            }
+
+        //System.out.println("test");
+
+
+
+
     }
 
     /**
