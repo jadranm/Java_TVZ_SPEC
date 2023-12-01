@@ -9,9 +9,7 @@ import hr.java.production.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -92,7 +90,7 @@ public class Main {
 
         categoryInput(categoryList);
 
-        itemInput(input, categoryList, itemList, categoryItemMap);
+        itemInput(categoryList, itemList, categoryItemMap);
         System.out.println();
 
         //factoryInput(input, numberOfItemsPerFactory, chosenItemsList, itemList, factoriesArray);
@@ -288,6 +286,25 @@ public class Main {
 
         System.out.println("__________________________________________________");
         System.out.println("Vrijeme izvođenja svih lamda funkcija: " + (System.currentTimeMillis() - startTime) + " ms");
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("dat/binary.dat"))) {
+            oos.writeObject(discountGraterThen0List);
+
+        }catch (IOException ex){
+            ex.printStackTrace();
+        }
+
+        /*
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("dat/binary.dat"))) {
+            List<Item> deserialisedItemList = (List<Item>) ois.readObject();
+            deserialisedItemList.forEach(System.out::println);
+
+        }catch (IOException | ClassNotFoundException ex){
+            ex.printStackTrace();
+        }
+
+         */
+
 
 
         //----------------
@@ -538,11 +555,10 @@ public class Main {
     /**
      * Metoda za unos podataka o predmetima (proizvodima).
      *
-     * @param input Scanner objekt za unos podataka.
      * @param categoryList Polje dostupnih kategorija proizvoda.
-     * @param itemList Lista objekata klase Item za pohranu unesenih podataka o proizvodima.
+     * @param itemList     Lista objekata klase Item za pohranu unesenih podataka o proizvodima.
      */
-    private static void itemInput(Scanner input, List<Category> categoryList, List<Item> itemList, Map categoryItemMap) {
+    private static void itemInput(List<Category> categoryList, List<Item> itemList, Map categoryItemMap) {
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader("dat/items.txt"))) {
 

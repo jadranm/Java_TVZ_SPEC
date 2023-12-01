@@ -1,12 +1,13 @@
 package hr.java.production.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
  * Predstavlja opću stavku s nazivom, kategorijom, dimenzijama, troškom proizvodnje, prodajnom cijenom i popustom.
  */
-public class Item extends NamedEntity {
+public class Item extends NamedEntity implements Serializable {
 
     Category category;
     BigDecimal width;
