@@ -10,11 +10,27 @@ import java.util.Objects;
 public class Factory extends NamedEntity {
 
     Address address;
-    Item[] items;
+    List<Item> items;
 
-    public Factory(String name, Integer id, Address address, Item[] items) {
+    public Factory(String name, Integer id, Address address, List<Item> items) {
         super(name, id);
         this.address = address;
+        this.items = items;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
         this.items = items;
     }
 
@@ -27,43 +43,17 @@ public class Factory extends NamedEntity {
      */
 
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public Item[] getItems() {
-        return items;
-    }
-
-    public void setItems(Item[] items) {
-        this.items = items;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Factory factory = (Factory) o;
-        return Objects.equals(address, factory.address) && Arrays.equals(items, factory.items);
+        return Objects.equals(address, factory.address) && Objects.equals(items, factory.items);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(super.hashCode(), address);
-        result = 31 * result + Arrays.hashCode(items);
-        return result;
+        return Objects.hash(super.hashCode(), address, items);
     }
 }
