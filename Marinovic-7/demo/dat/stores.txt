@@ -5,4 +5,4 @@ duckohr
 DucanHrane
 2
 hranahr
-4,5,6,1
+4,5,6

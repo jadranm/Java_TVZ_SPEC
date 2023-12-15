@@ -22,24 +22,12 @@ public class Main {
         Scanner input = new Scanner(System.in);
         //logger.info("program je pokrenut");
 
-
-        List<Factory> factoryList = new ArrayList<>();
-        List<Category> categoryList = new ArrayList<>();
-        List<Store> storeList = new ArrayList<>();
-        List<Item> itemList = new ArrayList<>();
-        List<Item> chosenStoreItemsList = new ArrayList<>();
-        List<Item> chosenItemsList = new ArrayList<>();
-
-        List<Store> listOfTehnicalStores = new ArrayList<>();
-        List<Store> listOfFoodStores = new ArrayList<>();
-
-        Map<Category, List<Item>> categoryItemMap = new HashMap<>();
-
         //metode
-        categoryReader(categoryList);
-        itemReader(categoryList, itemList, categoryItemMap);
-        factoryReader(itemList, factoryList);
-        storeReader(chosenItemsList, itemList, chosenStoreItemsList, storeList);
+        List<Category> categoryList = categoryReader();
+        List<Item> itemList = itemReader(categoryList);
+
+        List<Factory> factoryList = factoryReader(itemList);
+        List<Store> storeList =  storeReader(itemList);
 
 
         //lv5 priprema
@@ -81,12 +69,13 @@ public class Main {
     /**
      * Metoda za unos podataka o kategorijama proizvoda.
      *
-     * @param categoryList Lista objekata klase Category za pohranu unesenih podataka o kategorijama.
+     * @return
      */
-    private static void categoryReader(List<Category> categoryList) {
+    private static List<Category> categoryReader() {
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader("dat/categories.txt"))) {
 
+            List<Category> categoryList = new ArrayList<>();
             String line;
 
             while ((line = bufferedReader.readLine()) != null){
@@ -99,6 +88,7 @@ public class Main {
                 categoryList.add(newCategory);
             }
 
+            return categoryList;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -107,15 +97,14 @@ public class Main {
     /**
      * Metoda za unos podataka o dućanima i proizvodima koje prodaju.
      *
-     * @param chosenItemsArray      Polje odabranih stavki.
      * @param itemList              Polje svih dostupnih stavki.
-     * @param chosenStoreItemsArray Polje stavki koje su odabrane za pojedini dućan.
-     * @param storeList            Lista objekata klase Store za pohranu unesenih podataka o dućanima.
+     * @return
      */
-    private static void storeReader(List<Item> chosenItemsArray, List<Item> itemList, List<Item> chosenStoreItemsArray, List<Store> storeList) {
+    private static List<Store> storeReader(List<Item> itemList) {
 
         try (BufferedReader reader = new BufferedReader(new FileReader("dat/stores.txt"))) {
             String line;
+            List<Store> storeList = new ArrayList<>();
 
             while ((line = reader.readLine()) != null) {
 
@@ -134,6 +123,7 @@ public class Main {
                 Store store = new Store(name, id, webAddress, items);
                 storeList.add(store);
             }
+            return storeList;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -142,16 +132,17 @@ public class Main {
     /**
      * Metoda za unos podataka o tvornicama i proizvodima koje proizvode.
      *
-
-     * @param itemList Lista svih dostupnih stavki.
-     * @param factoryList Lista objekata klase Factory za pohranu unesenih podataka o tvornicama.
+     * @param itemList    Lista svih dostupnih stavki.
+     * @return
      */
-    private static void factoryReader(List<Item> itemList, List<Factory> factoryList) {
+    private static List<Factory> factoryReader(List<Item> itemList) {
 
         try (BufferedReader factoryReader = new BufferedReader(new FileReader("dat/factories.txt"));
              BufferedReader addressReader = new BufferedReader(new FileReader("dat/addresses.txt"))) {
 
+            List<Factory> factoryList = new ArrayList<>();
             String line;
+
             while ((line = factoryReader.readLine()) != null) {
 
                 String id = line.trim();
@@ -176,6 +167,7 @@ public class Main {
                 Factory newFactory = new Factory(name, factoryId, new Address(street, houseNumber, city, postalCode), chosenItemsList);
                 factoryList.add(newFactory);
             }
+            return factoryList;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -186,12 +178,12 @@ public class Main {
      * Metoda za unos podataka o predmetima (proizvodima).
      *
      * @param categoryList Polje dostupnih kategorija proizvoda.
-     * @param itemList     Lista objekata klase Item za pohranu unesenih podataka o proizvodima.
      */
-    private static void itemReader(List<Category> categoryList, List<Item> itemList, Map categoryItemMap) {
+    private static List<Item> itemReader(List<Category> categoryList) {
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader("dat/items.txt"))) {
 
+            List<Item> itemList = new ArrayList<>();
             String line;
 
             while ((line = bufferedReader.readLine()) != null){
@@ -211,6 +203,7 @@ public class Main {
                 itemList.add(newItem);
 
             }
+            return itemList;
 
         } catch (IOException e) {
             throw new RuntimeException(e);
