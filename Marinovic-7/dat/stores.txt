@@ -1,8 +1,8 @@
 Ducko
 1
-duckohr
+ducko.hr
 1,2,3
 DucanHrane
 2
-hranahr
+hrana.hr
 4,5,6

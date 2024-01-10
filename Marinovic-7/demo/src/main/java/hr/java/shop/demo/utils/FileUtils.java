@@ -66,7 +66,7 @@ public class FileUtils {
         }
     }
 
-    private static List<Factory> factoryReader(List<Item> itemList) {
+    public static List<Factory> factoryReader(List<Item> itemList) {
 
         try (BufferedReader factoryReader = new BufferedReader(new FileReader("dat/factories.txt"));
              BufferedReader addressReader = new BufferedReader(new FileReader("dat/addresses.txt"))) {
@@ -104,7 +104,7 @@ public class FileUtils {
         }
     }
 
-    private static List<Store> storeReader(List<Item> itemList) {
+    public static List<Store> storeReader(List<Item> itemList) {
 
         try (BufferedReader reader = new BufferedReader(new FileReader("dat/stores.txt"))) {
             String line;

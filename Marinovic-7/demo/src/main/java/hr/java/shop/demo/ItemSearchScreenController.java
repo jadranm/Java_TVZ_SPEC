@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -19,7 +20,9 @@ public class ItemSearchScreenController {
     @FXML
     private TextField itemNameTextField;
 
-    //mozda dodati jso jedan
+    @FXML
+    private ComboBox<String> categoryComboBox;
+
 
     @FXML
     private TableView<Item>  itemTableView;
@@ -60,6 +63,13 @@ public class ItemSearchScreenController {
         itemSellingPriceTableColumn.setCellValueFactory(cellData ->
                 new SimpleObjectProperty(cellData.getValue().getSellingPrice()));
 
+
+        List<Category> categoryList = FileUtils.categoryReader();
+        List<String> categoryNameList = categoryList.stream().map(Category::getName).toList();
+        ObservableList<String> observableCategoryNameList = FXCollections.observableArrayList(categoryNameList);
+
+        categoryComboBox.getItems().addAll(observableCategoryNameList);
+
     }
 
     public void searchItems(){
@@ -69,6 +79,11 @@ public class ItemSearchScreenController {
         if (Optional.ofNullable(itemNameTextField.getText()).isPresent()){
             itemList = itemList.stream()
                     .filter(item -> item.getName().contains(itemNameTextField.getText())).toList();
+        }
+
+        if (Optional.ofNullable(categoryComboBox.getValue()).isPresent()){
+            itemList = itemList.stream()
+                    .filter(item -> item.getCategory().getName().contains(categoryComboBox.getValue())).toList();
         }
 
         ObservableList <Item> observableItemList = FXCollections.observableArrayList(itemList);
