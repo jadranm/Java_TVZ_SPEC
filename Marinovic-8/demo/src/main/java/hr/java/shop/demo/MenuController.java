@@ -102,4 +102,18 @@ public class MenuController {
         MainApplication.getMainStage().show();
 
     }
+
+    public void showAddNewStoreScreen(){
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("addNewStoreScreen.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.<Parent>load(), 600, 400);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        MainApplication.getMainStage().setTitle("Add new Store");
+        MainApplication.getMainStage().setScene(scene);
+        MainApplication.getMainStage().show();
+
+    }
 }

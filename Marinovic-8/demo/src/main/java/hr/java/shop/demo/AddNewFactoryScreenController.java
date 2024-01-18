@@ -14,20 +14,19 @@ import javafx.scene.control.TextField;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class AddNewFactoryScreen {
+public class AddNewFactoryScreenController {
 
     @FXML
     private TextField factoryNameTextField;
 
     @FXML
-    private static ComboBox<String> factoryAddressComboBox;
+    private ComboBox<String> factoryAddressComboBox;
 
     @FXML
     private TextField factoryItemsTextField;
 
-    public static void initialize(){
+    public void initialize(){
 
         List<Address> addressList = FileUtils.addressReader();
 
@@ -54,14 +53,24 @@ public class AddNewFactoryScreen {
         List<Item> chosenItemsList = new ArrayList<>();
 
         for (Integer index : itemsIndexList){
-            chosenItemsList.add(itemList.get(index - 1));
+            if (index.equals(0)) {
+
+            }else {
+                chosenItemsList.add(itemList.get(index - 1));
+            }
         }
 
+        Integer chosenAddressIndex = null;
 
-        Factory newFactory = new Factory(factoryName,FileUtils.generateNewFactoryId(),addressList.getFirst(),chosenItemsList);
+        for (int i = 0; i < addressList.size(); i++) {
+            if (addressList.get(i).getStreet().equals(factoryAddressComboBox.getValue())){
+                chosenAddressIndex = i;
+            }
+        }
+
+        Factory newFactory = new Factory(factoryName,FileUtils.generateNewFactoryId(),addressList.get(chosenAddressIndex),chosenItemsList);
         factoryList.add(newFactory);
         FileUtils.saveFactories(factoryList);
 
     }
-
 }

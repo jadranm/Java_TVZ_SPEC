@@ -17,6 +17,8 @@ public class FileUtils {
 
     private static final String FACTORY_FILE_LOCATION = "dat/factories.txt";
 
+    private static final String STORE_FILE_LOCATION = "dat/stores.txt";
+
     public static List<Category> categoryReader() {
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(CATEGORY_FILE_LOCATION))) {
@@ -73,17 +75,19 @@ public class FileUtils {
 
     public static List<Factory> factoryReader(List<Item> itemList) {
 
-        try (BufferedReader factoryReader = new BufferedReader(new FileReader(FACTORY_FILE_LOCATION));
-             BufferedReader addressReader = new BufferedReader(new FileReader(ADDRESS_FILE_LOCATION))) {
+        List<Address> addressList = addressReader();
+
+        try (BufferedReader factoryReader = new BufferedReader(new FileReader(FACTORY_FILE_LOCATION))) {
 
             List<Factory> factoryList = new ArrayList<>();
             String line;
 
             while ((line = factoryReader.readLine()) != null) {
 
-                String id = line.trim();
-                String name = factoryReader.readLine().trim();
-                Integer factoryId = Integer.parseInt(factoryReader.readLine().trim());
+                Integer id = Integer.valueOf(line);
+                String name = factoryReader.readLine();
+                Integer addressIndex = Integer.parseInt(factoryReader.readLine()) - 1;
+
 
                 List<String> chosenItemsListIndex = List.of(factoryReader.readLine().trim().split(","));
                 List<Item> chosenItemsList = new ArrayList<>();
@@ -93,15 +97,10 @@ public class FileUtils {
                     chosenItemsList.add(itemList.get(Integer.parseInt(chosenItemIndex) - 1));
                 }
 
-                String street = addressReader.readLine().trim();
-                String houseNumber = addressReader.readLine().trim();
-                String city = addressReader.readLine().trim();
-                String postalCode = addressReader.readLine().trim();
-
-
-                Factory newFactory = new Factory(name, factoryId, new Address(street, houseNumber, city, postalCode), chosenItemsList);
+                Factory newFactory = new Factory(name, id, addressList.get(addressIndex), chosenItemsList);
                 factoryList.add(newFactory);
             }
+
             return factoryList;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -131,10 +130,9 @@ public class FileUtils {
         }
     }
 
-
     public static List<Store> storeReader(List<Item> itemList) {
 
-        try (BufferedReader reader = new BufferedReader(new FileReader("dat/stores.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(STORE_FILE_LOCATION))) {
             String line;
             List<Store> storeList = new ArrayList<>();
 
@@ -249,8 +247,48 @@ public class FileUtils {
                     stringJoiner.add(number.toString());
                 }
                 String resultUsingStringJoiner = stringJoiner.toString();
-                pw.println(resultUsingStringJoiner);
 
+                pw.println(resultUsingStringJoiner);
+            }
+
+        }catch (IOException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void saveStores(List<Store> storeList) {
+
+        List<Category> categoryList = categoryReader();
+        List<Item> itemList = itemReader(categoryList);
+
+
+
+        try(PrintWriter pw = new PrintWriter(new FileWriter(STORE_FILE_LOCATION))) {
+
+            for (Store store : storeList){
+
+                pw.println(store.getName());
+                pw.println(store.getId());
+                pw.println(store.getWebAddress());
+
+                List<Item> chosenItems = store.getItems();
+                List<Integer> chosenItemsIndexList = new ArrayList<>();
+
+                for (int i = 0; i < itemList.size(); i++) {
+                    for (int j = 0; j < chosenItems.size(); j++) {
+                        if (itemList.get(i).equals(chosenItems.get(j))){
+                            chosenItemsIndexList.add(i + 1);
+                        }
+                    }
+                }
+
+                StringJoiner stringJoiner = new StringJoiner(",");
+                for (Integer number : chosenItemsIndexList) {
+                    stringJoiner.add(number.toString());
+                }
+                String resultUsingStringJoiner = stringJoiner.toString();
+
+                pw.println(resultUsingStringJoiner);
             }
 
         }catch (IOException e){
@@ -283,7 +321,6 @@ public class FileUtils {
     public static Integer generateNewFactoryId(){
         List<Category> categoryList = FileUtils.categoryReader();
         List<Item> itemList = FileUtils.itemReader(categoryList);
-        List<Factory> factoryList = FileUtils.factoryReader(itemList);
 
         Optional<Factory> factoryOptional = factoryReader(itemList).stream().max((f1, f2) -> f1.getId().compareTo(f2.getId()));
 
@@ -293,5 +330,19 @@ public class FileUtils {
             return 1;
         }
     }
+
+    public static Integer generateNewStoreId(){
+        List<Category> categoryList = FileUtils.categoryReader();
+        List<Item> itemList = FileUtils.itemReader(categoryList);
+
+        Optional<Store> storeOptional = storeReader(itemList).stream().max((s1, s2) -> s1.getId().compareTo(s2.getId()));
+
+        if (storeOptional.isPresent()){
+            return storeOptional.get().getId() + 1;
+        }else {
+            return 1;
+        }
+    }
+
 
 }

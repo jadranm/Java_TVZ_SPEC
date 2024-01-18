@@ -30,7 +30,7 @@
             <Menu mnemonicParsing="false" text="Store">
                 <items>
                     <MenuItem mnemonicParsing="false" onAction="#showStoreSearchScreen" text="Search" />
-               <MenuItem mnemonicParsing="false" text="Add new" />
+               <MenuItem mnemonicParsing="false" onAction="#showAddNewStoreScreen" text="Add new" />
                 </items>
             </Menu>
         </menus>
